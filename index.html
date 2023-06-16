@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FOOD API Search</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+h1 {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+input[type="text"] {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button[type="submit"] {
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+#results {
+  margin-top: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 5px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+  </style>
+</head>
+<body>
+  <h1>Welcome to the most tastful Api</h1>
+
+  <form id="searchForm">
+    <label for="foodName">Food Name:</label>
+    <input type="text" id="foodName" name="foodName" required>
+    <button type="submit">Search</button>
+  </form>
+
+  <div id="results"></div>
+
+  <script>
+    const searchForm = document.getElementById('searchForm');
+    const resultsDiv = document.getElementById('results');
+
+    searchForm.addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const foodName = document.getElementById('foodName').value;
+      const apiKey = 'a1ce03fdd45248359907a9d626b26677';
+      
+
+      try {
+        const response = await fetch(`https://api.spoonacular.com/food/products/search?apiKey=${apiKey}&query=${foodName}`);
+        const data = await response.json();
+        const results = data.products;
+
+        displayResults(results);
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    function displayResults(results) {
+      let html = '';
+
+      if (results.length > 0) {
+        html += '<ul>';
+        results.forEach(product => {
+          html += `<li>${product.title}</li>`;
+        });
+        html += '</ul>';
+      } else {
+        html = 'No results found.';
+      }
+
+      resultsDiv.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
